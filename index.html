@@ -25,8 +25,9 @@
                 if (length > 42) {
                     length = 42;
                 }
-                var salt = sjcl.hash.sha256.hash(parameters);
-                var dKey = sjcl.misc.pbkdf2(password, salt, 32768);
+                var message = sjcl.codec.utf8String.toBits(parameters);
+                var secret = sjcl.codec.utf8String.toBits(password);
+                var dKey = new sjcl.misc.hmac(secret, sjcl.hash.sha256).encrypt(message);
                 var output = sjcl.codec.base64.fromBits(dKey);
                 var dk = document.getElementById("dk");
                 dk.value = output.substring(0,length);
