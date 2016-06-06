@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pass256</title>
+    <script type="text/javascript" src="sjcl.js"></script>
+    <script type="text/javascript">
+        function pass256() {
+            var parameters = document.getElementById("parameters").value;
+            var password = document.getElementById("password").value;
+            var length = document.getElementById("length").value;
+            length = parseInt(length);
+            length = length || 32;
+            if (length > 42) {
+                length = 42;
+            }
+            document.getElementById("length").value = length;
+            var message = sjcl.codec.utf8String.toBits(parameters);
+            var secret = sjcl.codec.utf8String.toBits(password);
+            var dKey = new sjcl.misc.hmac(secret, sjcl.hash.sha256).encrypt(message);
+            var output = sjcl.codec.base64.fromBits(dKey);
+            var dk = document.getElementById("dk");
+            dk.value = output.substring(0,length);
+            output = "";
+            dKey = "";
+            salt = "";
+            password = "";
+            parameters = "";
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: Arial;
+        }
+
+        label {
+            margin: 10px auto;
+            display: block;
+        }
+
+        .btn {
+            border-radius: 5px;
+            margin: 5px auto;
+            font-family: Arial;
+            color: #000000;
+            font-size: 16px;
+            background: #ffffff;
+            padding: 5px 10px 5px 10px;
+            border: solid #000000 3px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: #e0e0e0;
+            text-decoration: none;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="wrapper">
+        <form name="form1" autocomplete="off" onsubmit="">
+            <label>Master Passphrase<br>
+                <input type="password" name="password" id="password" size="33" tabindex="1" autofocus style="width: 90%;"
+                onkeydown="if (event.keyCode == 13) { pass256(); return false; }"><br>
+            </label>
+            <label>Account<br>
+                <input type="text" name="parameters" id="parameters" size="33" tabindex="2" style="width: 90%;"
+                onkeydown="if (event.keyCode == 13) { pass256(); return false; }"><br>
+            </label>
+            <label>Password Length<br>
+                <input type="text" name="length" id="length" value="32" size="3" maxlength="2" tabindex="3" style="width: 90%;"
+                onkeydown="if (event.keyCode == 13) { pass256(); return false; }"><br>
+            </label>
+            <label>Password<br>
+                <input type="text" name="dk" id="dk" size="33" onClick="this.setSelectionRange(0, this.value.length);" style="width: 90%;" tabindex="4"><br>
+            </label>
+        <input type="button" class="btn" value="Submit" name="submit" id="submit" onclick="pass256();" tabindex="5">
+        <input type="reset"  class="btn" tabindex="6">
+        </form>
+    </div>  <!-- end of wrapper -->
+</body>
+</html>
