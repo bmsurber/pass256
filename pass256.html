@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pass256</title>
     <script type="text/javascript" src="sjcl.js"></script>
     <script type="text/javascript">
@@ -30,30 +31,37 @@
     </script>
 
     <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
         body {
-            font-family: Arial;
+            font-family: verdana, arial, sans-serif;
+        }
+
+        input {
+            font-family: "Lucida Console", monospace;
+            font-size: 1em;
         }
 
         label {
-            margin: 10px auto;
+            margin: 0.7em;
             display: block;
         }
 
         .btn {
-            border-radius: 5px;
-            margin: 5px auto;
-            font-family: Arial;
+            border-radius: 3px;
+            margin: 0px 0.8em;
+            height: 2em;
             color: #000000;
-            font-size: 16px;
             background: #ffffff;
             padding: 5px 10px 5px 10px;
             border: solid #000000 3px;
-            text-decoration: none;
         }
 
         .btn:hover {
             background: #e0e0e0;
-            text-decoration: none;
         }
     </style>
 
