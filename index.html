@@ -41,9 +41,14 @@
             font-size: 120%;
         }
 
+        main {
+            margin: 5%;
+        }
+
         input {
             font-family: "Lucida Console", monospace;
             font-size: 1em;
+            height: 1.5em;
         }
 
         label {
@@ -68,26 +73,26 @@
 
 </head>
 <body>
-    <div id="wrapper">
-        <form name="form1" autocomplete="off" onsubmit="">
+    <main>
+        <form name="form1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onsubmit="">
             <label>Master Passphrase<br>
-                <input type="password" name="password" id="password" size="33" tabindex="1" autofocus style="width: 90%;"
+                <input type="password" name="password" id="password" size="33" tabindex="1" autofocus autocomplete="new-password" style="width: 100%"
                 onkeydown="if (event.keyCode == 13) { pass256(); return false; }"><br>
             </label>
             <label>Account<br>
-                <input type="text" name="parameters" id="parameters" size="33" tabindex="2" style="width: 90%;"
+                <input type="text" name="parameters" id="parameters" size="33" tabindex="2" style="width: 100%;"
                 onkeydown="if (event.keyCode == 13) { pass256(); return false; }"><br>
             </label>
             <label>Password Length<br>
-                <input type="text" name="length" id="length" value="32" size="3" maxlength="2" tabindex="3" style="width: 90%;"
+                <input type="text" name="length" id="length" value="32" size="3" maxlength="2" tabindex="3" style="width: 100%;"
                 onkeydown="if (event.keyCode == 13) { pass256(); return false; }"><br>
             </label>
             <label>Password<br>
-                <input type="text" name="dk" id="dk" size="33" onClick="this.setSelectionRange(0, this.value.length);" style="width: 90%;" tabindex="4"><br>
+                <input type="text" name="dk" id="dk" size="33" onClick="this.setSelectionRange(0, this.value.length);" style="width: 100%;" tabindex="4"><br>
             </label>
         <input type="button" class="btn" value="Submit" name="submit" id="submit" onclick="pass256();" tabindex="5">
         <input type="reset"  class="btn" tabindex="6">
         </form>
-    </div>  <!-- end of wrapper -->
+    </main>
 </body>
 </html>
