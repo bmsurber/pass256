@@ -21,6 +21,7 @@
             var dKey = new sjcl.misc.hmac(secret, sjcl.hash.sha256).encrypt(message);
             var output = sjcl.codec.base64.fromBits(dKey);
             var dk = document.getElementById("dk");
+            dk.type = 'password'
             dk.value = output.substring(0,length);
             output = "";
             dKey = "";
@@ -51,6 +52,10 @@
             height: 1.5em;
         }
 
+        input:focus {
+            background: LightBlue;
+        }
+
         label {
             margin: 0.7em;
             display: block;
@@ -74,7 +79,7 @@
 <body>
     <main>
         <form name="form1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onsubmit="">
-            <label>Master Passphrase<br>
+            <label>Master Key<br>
                 <input type="password" name="password" id="password" size="33" tabindex="1" autofocus autocomplete="new-password" style="width: 100%"
                 onkeydown="if (event.keyCode == 13) { pass256(); return false; }"><br>
             </label>
@@ -82,12 +87,12 @@
                 <input type="text" name="parameters" id="parameters" size="33" tabindex="2" style="width: 100%;"
                 onkeydown="if (event.keyCode == 13) { pass256(); return false; }"><br>
             </label>
-            <label>Password Length<br>
+            <label>Length<br>
                 <input type="text" name="length" id="length" value="32" size="3" maxlength="2" tabindex="3" style="width: 100%;"
                 onkeydown="if (event.keyCode == 13) { pass256(); return false; }"><br>
             </label>
             <label>Password<br>
-                <input type="text" name="dk" id="dk" size="33" onClick="this.setSelectionRange(0, this.value.length);" style="width: 100%;" tabindex="4"><br>
+                <input type="password" name="dk" id="dk" size="33" onBlur="javascript:if(this.value!==''){this.type='password'}" onFocus="javascript:if(this.value!==''){this.type='text'}"  onClick="this.setSelectionRange(0, this.value.length);" style="width: 100%;" tabindex="4"><br>
             </label>
         <input type="button" class="btn" value="Submit" name="submit" id="submit" onclick="pass256();" tabindex="5">
         <input type="reset"  class="btn" tabindex="6">
