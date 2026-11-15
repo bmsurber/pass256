@@ -4,9 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pass256</title>
-    <script type="text/javascript" src="sjcl.js"></script>
     <script type="text/javascript">
-        function pass256() {
+        // base64( HMAC-SHA256(key = masterKey, message = account) ), both UTF-8 encoded.
+        async function hmacSha256Base64(masterKey, account) {
+            var encoder = new TextEncoder();
+            var keyBytes = encoder.encode(masterKey);
+            // Web Crypto rejects zero-length HMAC keys. HMAC zero-pads keys shorter
+            // than the 64-byte SHA-256 block, so an empty key is identical to 64 zero bytes.
+            if (keyBytes.length === 0) {
+                keyBytes = new Uint8Array(64);
+            }
+            var key = await crypto.subtle.importKey("raw", keyBytes, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+            var mac = new Uint8Array(await crypto.subtle.sign("HMAC", key, encoder.encode(account)));
+            return btoa(String.fromCharCode.apply(null, mac));
+        }
+
+        async function pass256() {
+            if (!window.crypto || !window.crypto.subtle) {
+                alert("Web Crypto is unavailable. Open this page over HTTPS, localhost, or as a local file.");
+                return;
+            }
             var parameters = document.getElementById("parameters").value;
             var password = document.getElementById("password").value;
             var length = document.getElementById("length").value;
@@ -16,16 +33,11 @@
                 length = 42;
             }
             document.getElementById("length").value = length;
-            var message = sjcl.codec.utf8String.toBits(parameters);
-            var secret = sjcl.codec.utf8String.toBits(password);
-            var dKey = new sjcl.misc.hmac(secret, sjcl.hash.sha256).encrypt(message);
-            var output = sjcl.codec.base64.fromBits(dKey);
+            var output = await hmacSha256Base64(password, parameters);
             var dk = document.getElementById("dk");
             dk.type = 'password'
             dk.value = output.substring(0,length);
             output = "";
-            dKey = "";
-            salt = "";
             password = "";
             parameters = "";
         }
